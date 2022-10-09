@@ -1,0 +1,12 @@
+.suras {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 2em;
+  justify-content: center;
+  align-items: center;
+}
+
+.sura {
+  font-size: 26px;
+  cursor: pointer;
+}
