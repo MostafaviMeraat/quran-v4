@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react'
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 import { pages, suras } from '../quran-resources (farawin)/quran-metadata'
 import emla from '../quran-resources (farawin)/quran-text-emla'
@@ -11,6 +11,13 @@ const Sura = () => {
   const [page, setPage] = useState(1);
   let { id } = useParams();
   const [content, setContent] = useState([])
+  const [isPlay, setIsPlay] = useState(false)
+  const audio = useRef()
+  const [sutValue, setSutValue] = useState('')
+  const [curr, setCurr] = useState({
+    s: '',
+    a: '',
+  })
 
   //useEffects
   useEffect(() => {
@@ -52,14 +59,7 @@ const Sura = () => {
     let prePage = pages[page - 1]
     let diff = currPage[0] - prePage[0]
 
-    if (page !== 1 && parseInt(id) !== 9) {
-      if (diff === 1) {
-        // arr.push('بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ')
-      }
-      else if (diff > 1) {
 
-      }
-    }
     for (let c = start; c < (end - start) + start; c++) {
       arr.push(emla[c])
     }
@@ -83,15 +83,52 @@ const Sura = () => {
     }
     setPage(page - 1);
   }
+  const digitCount = (number) => {
+    let counter = 1
+    while (number / 10 >= 1) {
+      number /= 10;
+      counter++
+    }
+    return counter
+
+  }
+  const handelSut = (sura, aya) => {
+
+    let mySura = ''
+    let myAya = ''
+
+    let digits = {
+      sura: digitCount(parseInt(sura)),
+      aya: digitCount(aya)
+    }
+    if (digits.sura === 2) {
+      mySura = '0' + sura
+    }
+    else if (digits.sura === 1) {
+      mySura = '00' + sura
+    }
+    if (digits.aya === 2) {
+      myAya = '0' + aya
+    }
+    else if (digits.sura === 1) {
+      myAya = '00' + aya
+    }
+
+    setSutValue(`http://www.everyayah.com/data/Menshawi_32kbps/${mySura}${myAya}.mp3`)
+  }
+  const next = () => {
+
+  }
 
   return (
     <div>
+      <audio ref={audio} className='audio' src={sutValue} autoPlay onEnded={next} />
       <h1>{suras[id][4]}</h1>
       <h1>{page}</h1>
       {content.map((item, index) => {
         return (<div key={index}>
           {emla.indexOf(item) - suras[id][0] + 1 === 1 && <h3>بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ</h3>}
-          <p>
+          <p onClick={() => { handelSut(id, emla.indexOf(item) - suras[id][0] + 1) }}>
             {item}
             {emla.indexOf(item) - suras[id][0] + 1 > 0
               &&

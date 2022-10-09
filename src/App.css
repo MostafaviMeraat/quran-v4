@@ -10,3 +10,7 @@
   font-size: 26px;
   cursor: pointer;
 }
+
+.audio {
+  display: none;
+}
