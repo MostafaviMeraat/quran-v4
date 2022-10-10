@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react'
-import { useState, useRef } from 'react';
+import { useState, useRef, forceUpdate } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 import { pages, suras } from '../quran-resources (farawin)/quran-metadata'
 import emla from '../quran-resources (farawin)/quran-text-emla'
@@ -14,10 +14,8 @@ const Sura = () => {
   const [isPlay, setIsPlay] = useState(false)
   const audio = useRef()
   const [sutValue, setSutValue] = useState('')
-  const [curr, setCurr] = useState({
-    s: '',
-    a: '',
-  })
+  const [curr, setCurr] = useState([])
+
 
   //useEffects
   useEffect(() => {
@@ -29,7 +27,7 @@ const Sura = () => {
       setContent([])
     }
   }, [page])
-  //function
+  //functio=n
   const findPage = (id) => {
     for (let c = 1; c < pages.length; c++) {
       if (parseInt(id) === pages[c][0] && pages[c][1] === 1) {
@@ -37,7 +35,7 @@ const Sura = () => {
         break
       }
       else if ((parseInt(id) === pages[c][0])) {
-        setPage(c) // c-1 for pages like 106 or 255
+        setPage(c - 1) // c-1 for pages like 106 or 255
         break;
       }
       else {
@@ -55,10 +53,6 @@ const Sura = () => {
     let arr = []
     let start = suras[pages[page][0]][0] + pages[page][1] - 1
     let end = suras[pages[page + 1][0]][0] + pages[page + 1][1] - 1
-    let currPage = pages[page]
-    let prePage = pages[page - 1]
-    let diff = currPage[0] - prePage[0]
-
 
     for (let c = start; c < (end - start) + start; c++) {
       arr.push(emla[c])
@@ -68,7 +62,6 @@ const Sura = () => {
   const handelNext = () => {
     {
       if (pages[page + 1][0] !== pages[page][0]) {
-        console.log(pages[page + 1][0], pages[page][0]);
         navigate(`/sura/${parseInt(id) + 1}`)
       }
       if (page !== 604) {
@@ -92,34 +85,44 @@ const Sura = () => {
     return counter
 
   }
-  const handelSut = (sura, aya) => {
+  const format = (sura, aya) => {
 
     let mySura = ''
     let myAya = ''
-
     let digits = {
       sura: digitCount(parseInt(sura)),
-      aya: digitCount(aya)
+      aya: digitCount(parseInt(aya))
     }
     if (digits.sura === 2) {
       mySura = '0' + sura
+      setCurr([mySura, myAya])
     }
     else if (digits.sura === 1) {
       mySura = '00' + sura
+      setCurr([mySura, myAya])
     }
     if (digits.aya === 2) {
       myAya = '0' + aya
+      setCurr([mySura, myAya])
     }
     else if (digits.sura === 1) {
       myAya = '00' + aya
+      setCurr([mySura, myAya])
     }
+  }
+  const handelSut = (sura, aya) => {
+    format(parseInt(sura), parseInt(aya))
 
-    setSutValue(`http://www.everyayah.com/data/Menshawi_32kbps/${mySura}${myAya}.mp3`)
+    setSutValue(`http://www.everyayah.com/data/Menshawi_32kbps/${curr[0]}${curr[1]}.mp3`)
   }
   const next = () => {
-
+    if (parseInt(curr[1]) < suras[parseInt(curr[0])][1]) {
+      let aye = parseInt(curr[1]) + 1
+      format(parseInt(curr[0]), parseInt(aye))
+      console.log(curr);
+      setSutValue(`http://www.everyayah.com/data/Menshawi_32kbps/${curr[0]}${curr[1]}.mp3`)
+    }
   }
-
   return (
     <div>
       <audio ref={audio} className='audio' src={sutValue} autoPlay onEnded={next} />
