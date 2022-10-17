@@ -17,7 +17,6 @@ const Sura = () => {
   const [sutValue, setSutValue] = useState('')
   const [curr, setCurr] = useState([])
 
-
   //useEffects
   useEffect(() => {
     findPage(id)
@@ -126,7 +125,7 @@ const Sura = () => {
   }
   return (
     <div>
-      <PageContent page={page} />
+      <PageContent page={page} id={id} />
     </div >
   )
 }

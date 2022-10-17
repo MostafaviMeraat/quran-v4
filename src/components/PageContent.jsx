@@ -1,10 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { pages, suras } from '../quran-resources (farawin)/quran-metadata'
 import emla from '../quran-resources (farawin)/quran-text-emla'
 
-let PageContent = ({ page }) => {
+let PageContent = ({ page, id }) => {
 
   //variables
   let arr = []
@@ -15,6 +16,8 @@ let PageContent = ({ page }) => {
   let start = 0
   let end = 0
   const [counter, setCounter] = useState([])
+  const navigate = useNavigate()
+  const [toggle, setToggle] = useState(false)
 
   //useEffects
   useEffect(() => {
@@ -23,24 +26,20 @@ let PageContent = ({ page }) => {
 
   useEffect(() => {
     pageCreator(myPage)
-  }, [myPage])
-
-  useEffect(() => {
-    if (pageTemp.length > 0) {
-      addBesmellah(pageTemp, myPage, start, end)
+    return () => {
+      setPageTemp([])
     }
   }, [myPage])
 
   useEffect(() => {
     if (pageTemp.length > 0) {
-      addBesmellah(pageTemp, myPage, start, end)
+      addBesmellah(pageTemp, myPage)
     }
-  }, [pageTemp])
+  }, [myPage, pageTemp])
 
   useEffect(() => {
     countAye(pageTemp, myPage)
   }, [pageTemp])
-
 
   //functions
 
@@ -54,25 +53,24 @@ let PageContent = ({ page }) => {
     setPageTemp(arr)
   }
 
-  const addBesmellah = (pageTemp, myPage, start, end) => {
-    // console.log(pageTemp);
+  const addBesmellah = (pageTemp, myPage) => {
 
-    // for (let c = 0; c < pageTemp.length; c++) {
-    //   if (true) {
-    //     for (let c1 = 1; c1 < suras.length; c1++) {
-    //       if (suras[c1][0] === emla.indexOf(pageTemp[c]) && emla.indexOf(pageTemp[c]) !== 0) {
-    //         console.log('here');
-    //         arr.splice(c, 0, 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ')
-    //       }
-    //     }
-    //   }
-    // }
+    for (let c = 0; c < pageTemp.length; c++) {
+      for (let c1 = 1; c1 < suras.length; c1++) {
+        if (emla.indexOf(pageTemp[c]) === suras[c1][0] && c1 >= pages[myPage][0] && c1 <= pages[myPage + 1][0]) {
+          if (c1 !== c1 - 1 && arr[0] !== 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ' && c1 !== 9) {
+            console.log(suras[c1][4], c);
+            arr.splice(c, 0, 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ')
+          }
+        }
+      }
+    }
   }
   const countAye = (pageTemp, myPage) => {
     for (let c = 0; c < pageTemp.length; c++) {
       for (let c1 = 1; c1 < suras.length; c1++) {
         if (emla.indexOf(pageTemp[c]) < suras[c1][0]) {
-          console.log(c1 - 1)
+          // console.log(c1 - 1)
           break
         }
       }
@@ -84,7 +82,7 @@ let PageContent = ({ page }) => {
   const prePage = () => {
     setMyPage(myPage - 1)
   }
-  console.log(ayeNumber);
+  // console.log(ayeNumber);
   return (
     <div>
       <h1>{myPage}</h1>
@@ -95,6 +93,11 @@ let PageContent = ({ page }) => {
       })}
       <button onClick={nextPage}>next</button>
       <button onClick={prePage}>pre</button>
+      <br />
+      <button onClick={() => { navigate(`/sura/${parseInt(id) + 1}`) }}>Next Sure</button>
+      <button onClick={() => { navigate(`/sura/${parseInt(id) - 1}`) }}>pre Sure</button>
+      <br />
+      <button onClick={() => { navigate('/') }}>Back to Menu </button>
     </div >
   )
 }
