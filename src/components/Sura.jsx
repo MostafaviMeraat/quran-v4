@@ -4,6 +4,7 @@ import { useState, useRef, forceUpdate } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 import { pages, suras } from '../quran-resources (farawin)/quran-metadata'
 import emla from '../quran-resources (farawin)/quran-text-emla'
+import PageContent from './PageContent';
 
 const Sura = () => {
   //variables
@@ -27,7 +28,7 @@ const Sura = () => {
       setContent([])
     }
   }, [page])
-  //functio=n
+  //functions
   const findPage = (id) => {
     for (let c = 1; c < pages.length; c++) {
       if (parseInt(id) === pages[c][0] && pages[c][1] === 1) {
@@ -125,26 +126,7 @@ const Sura = () => {
   }
   return (
     <div>
-      <audio ref={audio} className='audio' src={sutValue} autoPlay onEnded={next} />
-      <h1>{suras[id][4]}</h1>
-      <h1>{page}</h1>
-      {content.map((item, index) => {
-        return (<div key={index}>
-          {emla.indexOf(item) - suras[id][0] + 1 === 1 && <h3>بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ</h3>}
-          <p onClick={() => { handelSut(id, emla.indexOf(item) - suras[id][0] + 1) }}>
-            {item}
-            {emla.indexOf(item) - suras[id][0] + 1 > 0
-              &&
-              <span>{emla.indexOf(item) - suras[id][0] + 1}</span>}
-          </p>
-
-        </div>)
-      })}
-      {parseInt(id) !== 114 && < button onClick={handelNext} autoFocus>next</button>}
-      {page !== 1 && <button onClick={handelPre}>pre</button>}
-      <div>
-        <button onClick={() => { navigate('/') }}>Back to Menu</button>
-      </div>
+      <PageContent page={page} />
     </div >
   )
 }

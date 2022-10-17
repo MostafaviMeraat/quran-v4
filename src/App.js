@@ -2,6 +2,7 @@ import './App.css';
 import Search from './components/Search';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Sura from './components/Sura';
+import Page from './components/Page';
 
 
 function App() {
