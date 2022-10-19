@@ -35,6 +35,7 @@ let PageContent = ({ page, id }) => {
     if (pageTemp.length > 0) {
       addBesmellah(pageTemp, myPage)
     }
+    console.log(arr);
   }, [myPage, pageTemp])
 
   useEffect(() => {
@@ -54,17 +55,18 @@ let PageContent = ({ page, id }) => {
   }
 
   const addBesmellah = (pageTemp, myPage) => {
-
+    const arr2 = [...arr]
     for (let c = 0; c < pageTemp.length; c++) {
       for (let c1 = 1; c1 < suras.length; c1++) {
         if (emla.indexOf(pageTemp[c]) === suras[c1][0] && c1 >= pages[myPage][0] && c1 <= pages[myPage + 1][0]) {
-          if (c1 !== c1 - 1 && arr[0] !== 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ' && c1 !== 9) {
+          if (c1 !== c1 - 1 && arr2[0] !== 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ' && c1 !== 9) {
             console.log(suras[c1][4], c);
-            arr.splice(c, 0, 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ')
+            arr2.splice(c, 0, 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ')
           }
         }
       }
     }
+    setPageTemp(pageTemp)
   }
   const countAye = (pageTemp, myPage) => {
     for (let c = 0; c < pageTemp.length; c++) {
