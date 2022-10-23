@@ -10,6 +10,7 @@ import Besmellah from './Besmellah'
 let PageContent = ({ page, id }) => {
 
   //variables
+
   let arr = []
   const [pageTemp, setPageTemp] = useState([])
   const [myPage, setMyPage] = useState(page)
@@ -20,6 +21,7 @@ let PageContent = ({ page, id }) => {
   const [indexes, setIndexes] = useState([])
 
   //useEffects
+
   useEffect(() => {
     setMyPage(page)
   }, [page])
@@ -30,25 +32,6 @@ let PageContent = ({ page, id }) => {
       setPageTemp([])
     }
   }, [myPage])
-
-<<<<<<< HEAD
-  useEffect(() => {
-    if (pageTemp.length > 0) {
-      addBesmellah(pageTemp, myPage)
-    }
-    console.log(arr);
-  }, [myPage, pageTemp])
-=======
-  // useEffect(() => {
-  //   if (pageTemp.length > 0) {
-  //     addBesmellah(pageTemp, myPage)
-  //   }
-  // }, [myPage])
-
-  // useEffect(() => {
-  //   countAye(pageTemp, myPage)
-  // }, [pageTemp])
->>>>>>> fc1c73150bea7e44c4a9fc7277e403b561913184
 
   useEffect(() => {
     findIndexes(pageTemp)
@@ -65,57 +48,6 @@ let PageContent = ({ page, id }) => {
     }
     setPageTemp(arr)
   }
-<<<<<<< HEAD
-
-  const addBesmellah = (pageTemp, myPage) => {
-    const arr2 = [...arr]
-    for (let c = 0; c < pageTemp.length; c++) {
-      for (let c1 = 1; c1 < suras.length; c1++) {
-        if (emla.indexOf(pageTemp[c]) === suras[c1][0] && c1 >= pages[myPage][0] && c1 <= pages[myPage + 1][0]) {
-          if (c1 !== c1 - 1 && arr2[0] !== 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ' && c1 !== 9) {
-            console.log(suras[c1][4], c);
-            arr2.splice(c, 0, 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ')
-          }
-        }
-      }
-    }
-    setPageTemp(pageTemp)
-  }
-  const countAye = (pageTemp, myPage) => {
-    for (let c = 0; c < pageTemp.length; c++) {
-      for (let c1 = 1; c1 < suras.length; c1++) {
-        if (emla.indexOf(pageTemp[c]) < suras[c1][0]) {
-          // console.log(c1 - 1)
-          break
-        }
-      }
-    }
-  }
-=======
-  // const addBesmellah = (pageTemp, myPage) => {
-  //   for (let c = 0; c < pageTemp.length; c++) {
-  //     for (let c1 = 1; c1 < suras.length; c1++) {
-  //       if (emla.indexOf(pageTemp[c]) === suras[c1][0] && c1 >= pages[myPage][0] && c1 <= pages[myPage + 1][0]) {
-  //         if (c1 !== c1 - 1 && c1 !== 9 && myPage !== 1) {
-  //           // console.log(suras[c1][4], c)
-  //           arr.splice(c, 0, 'بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ')
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  //====================
-  // const countAye = (pageTemp, myPage) => {
-  //   for (let c = 0; c < pageTemp.length; c++) {
-  //     for (let c1 = 1; c1 < suras.length; c1++) {
-  //       if (emla.indexOf(pageTemp[c]) < suras[c1][0]) {
-  //         // console.log(c1 - 1)
-  //         break
-  //       }
-  //     }
-  //   }
-  // }
->>>>>>> fc1c73150bea7e44c4a9fc7277e403b561913184
   const nextPage = () => {
     setMyPage(myPage + 1)
   }
